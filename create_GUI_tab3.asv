@@ -85,31 +85,8 @@ function load_BeforeAnnotationData ()
     % show the image in both the axes.
     imshow(model.tab3.image.input, 'Parent', view.tab3.axis_before_image);
     imshow(model.tab3.image.input, 'Parent', view.tab3.axis_after_image);
-    zoom on;
     
-    % load the datapoints from the file
-    Data = [];
-    for k = 1:size(model.tab3.struct.f_data,1) 
-        Data(k).peak = model.tab3.struct.f_data(k,4); 
-        Data(k).r = round(model.tab3.struct.f_data(k,2)); 
-        Data(k).c = round(model.tab3.struct.f_data(k,1)); 
-    end
-    
-    Data = nestedSortStruct(Data, 'peak');
-    limit = round(length(Data) * model.nums.background_ratio);
-    Data = fliplr(Data);
-    
-    fgspots = Data(1:length(Data)-limit);
-    bgspots = Data((length(Data)-limit)+1:end);
-    assert(length([fgspots bgspots]) == length(Data), 'Assertion failed in load_BeforeAnnotationData');
-    
-    axes(view.tab3.axis_before_image); hold on;
-    for i = 1:length(fgspots)
-        plot(fgspots(i).c, fgspots(i).r, 'r.');
-    end
-    for i = 1:length(bgspots)
-        plot(bgspots(i).c, bgspots(i).r, 'g.');
-    end
+    % load the datapoints 
 
 end
 
