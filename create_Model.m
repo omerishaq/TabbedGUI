@@ -43,5 +43,7 @@ model.tab3.image.input = zeros(10,10);
 
 model.tab3.struct.f_data = struct;
 
+model.tab3.threshold_values = {nan, 0.5, 0.6, 0.7, 0.8};
+
 end
 

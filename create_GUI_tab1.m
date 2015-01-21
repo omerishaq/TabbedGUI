@@ -3,6 +3,7 @@ function [ output_args ] = create_GUI_tab1( settings, hTabGroup)
 %   Detailed explanation goes here
 
 global view;
+global model;
 
 tab1_X_offset = 150;
 tab1_Y_offset = -100;
@@ -22,6 +23,20 @@ popup = uicontrol(tab1, 'Style', 'popup', 'String', {'   ','Single image','Multi
 align([ui_text popup],'None','Middle');
 align([ui_button_user popup], 'Right','None')
 view.tab1.popup_mode = popup;
+
+Records = load(model.strings.resultsfilename);
+Records = Records.Records;
+
+for i = 1:length(Records)
+    CellArray{i} = getfield(Records(i), 'user');
+end
+CellArray = unique(CellArray)';
+
+cnames = {'User names'};
+t = uitable('Parent', tab1,'Data',CellArray,'ColumnWidth',{215},'Position', [550 50 300 400], 'ColumnName',cnames);
+
+
+
 end
 
 function save_User(hObject, event, handles)

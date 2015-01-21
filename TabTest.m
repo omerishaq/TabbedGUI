@@ -1,4 +1,6 @@
 % Tab test file
+function TabTest ()
+
 clearvars
 close all
 clc
@@ -15,7 +17,7 @@ initialize_GUI(hTabGroup);              % initialize the GUI
 initialize_LookAndFeel();               % initialize the look and feel
 
 % actual start of the application
-
+end
 
 
 

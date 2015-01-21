@@ -29,7 +29,7 @@ view.tab2.axes_green_right = 0;
 % size of the different tabs
 %
 
-view.position = [   324 200 672 504;...
+view.position = [   324 200 872 504;...
                     124 200 1172 804;...
                     84 200 1500 804];
 
@@ -47,6 +47,7 @@ view.tab3.axis_before_spots = 0;
 view.tab3.axis_before_image = 0;
 view.tab3.axis_after_spots = 0;
 view.tab3.axis_after_image = 0;
+view.tab3.radio_displays = 0;
 
 %
 % place holder for tab 4
