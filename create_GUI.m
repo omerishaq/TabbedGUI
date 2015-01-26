@@ -1,3 +1,5 @@
+% INSERT COPYRIGHT INFORMATION HERE
+
 function [hTabGroup] = create_GUI(settings)
 
 global view;

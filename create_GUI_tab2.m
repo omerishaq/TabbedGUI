@@ -234,7 +234,7 @@ function setup_SingleView_Logic()
     global model;
 
     % Load the Data file
-    if exist(model.strings.datafilename, 'file')
+if exist(model.strings.datafilename, 'file')
     % Data file exists, therefore ...
     
     % ... Load all the data.
