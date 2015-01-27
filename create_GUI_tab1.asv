@@ -79,9 +79,9 @@ function load_User(hObject, event, handles)
     global model;
     global view;
     
-    selected_Index = event.Indices(1);
+    selected_Index = CellArray(event.Indices(1));
     
-    view.tab1.edit_user.String = CellArray(selected_Index);
+    
 
 end
 

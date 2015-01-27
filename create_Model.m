@@ -22,6 +22,7 @@ model.image.next = zeros(10,10);
 model.image.prev = zeros(10,10);
 
 model.flag.debug = 1;
+model.flag.tab1_finished = 0;
 
 model.struct.data = struct;
 model.struct.up = struct;

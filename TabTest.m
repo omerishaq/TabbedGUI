@@ -1,4 +1,11 @@
-% Tab test file
+% INSERT COPYRIGHT INFORMATION HERE
+% INSERT COPYRIGHT INFORMATION HERE
+% INSERT COPYRIGHT INFORMATION HERE
+% INSERT COPYRIGHT INFORMATION HERE
+
+% Insert the script which is to be run at this step to create a database file.
+
+% The entry function for the application.
 function TabTest ()
 
 clearvars
@@ -16,7 +23,6 @@ hTabGroup = create_GUI(settings);       % create the GUI
 initialize_GUI(hTabGroup);              % initialize the GUI
 initialize_LookAndFeel();               % initialize the look and feel
 
-% actual start of the application
 end
 
 

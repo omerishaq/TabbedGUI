@@ -1,4 +1,4 @@
-% INSERT COPYRIGHT INFORMATION HERE
+
 
 function [hTabGroup] = create_GUI(settings)
 
@@ -15,7 +15,6 @@ create_GUI_tab2( settings, hTabGroup);
 create_GUI_tab3( settings, hTabGroup);
 
 tab4 = uitab(hTabGroup, 'title','Graphs');
-
 
 end
 
