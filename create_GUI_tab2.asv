@@ -17,7 +17,7 @@ tab1 = uitab(hTabGroup, 'title','Single Image');
 
 position = view.position(2,:);
 
-ui_slider = uicontrol(tab1, 'Style', 'slider','Position', [0 0 100 25]);
+ui_slider = uicontrol(tab1, 'Style', 'slider');
 
 
 ui_text = uicontrol(tab1, 'Style', 'text', 'String', 'Specify file name',...
