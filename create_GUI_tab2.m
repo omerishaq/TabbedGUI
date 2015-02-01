@@ -17,7 +17,7 @@ tab1 = uitab(hTabGroup, 'title','Single Image');
 
 position = view.position(2,:);
 
-ui_slider = uicontrol(tab1, 'Style', 'slider','Position', [0 0 100 25]);
+ui_slider = uicontrol(tab1, 'Style', 'slider','Position', [0 0 100 25], 'Callback', @slidercallback, 'Min',1,'Max',50,'Value',41);
 
 
 ui_text = uicontrol(tab1, 'Style', 'text', 'String', 'Specify file name',...
@@ -430,6 +430,13 @@ function update_Counter()
     global model;
     global view;
     set(view.tab2.text_progress, 'string', ['Image ' num2str(model.nums.samplescounter) ' of ' num2str(model.nums.samples)]);
+end
+ 
+function slidercallback(source, callbackdata)
+
+    % There are three important things here
+    % min, max and the value properties
+
 end
 
 
