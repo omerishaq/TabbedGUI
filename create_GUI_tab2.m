@@ -18,6 +18,7 @@ tab1 = uitab(hTabGroup, 'title', 'Annotation');
 position = view.position(2,:);
 
 ui_slider = uicontrol(tab1, 'Style', 'slider','Position', [1100 300 20 300], 'Callback', @slidercallback, 'Min',1,'Max',50,'Value',41);
+view.tab2.slider = ui_slider;
 
 tab1_instructions = ['Welcome to the Forced choice image annotation tab. Specify the image to be loaded by pressing the' ...
     ' load image button at the top, the image to be loaded should have a corresponding text file in the same directory' ...
@@ -86,6 +87,15 @@ function select_DataFile(hObject, event, handles)
     update_Tab2_MainAxes();
     
     tempfilename = model.strings.imgfilename(1:end-4);
+    
+    % START - ABC - Here comes in the code for tying the slider bar to the image depth
+    img_info = imfinfo([model.strings.imgfilepath model.strings.imgfilename]);
+    view.tab2.slider.Max = 2^(img_info.BitDepth)-1;
+    view.tab2.slider.Min = 0;
+    view.tab2.slider.Value = 2^(img_info.BitDepth)-1;
+    % STOP - ABC
+    
+    % This line of code is important since it loads the f_data structure
     model.struct.f_data = csvread([ model.strings.imgfilepath tempfilename '.csv'], 1, 0);
     
     % here comes the function to setup the initial code for single view
@@ -97,7 +107,7 @@ function update_Tab2_MainAxes()
 
     global model;
     global view;
-    imshow(model.image.input, 'Parent', view.tab2.axes_main);
+    imshow(model.image.input, [view.tab2.slider.Min view.tab2.slider.Value], 'Parent', view.tab2.axes_main);
     
 end
 
@@ -446,6 +456,9 @@ function slidercallback(source, callbackdata)
 
     % There are three important things here
     % min, max and the value properties
+    % num2str(source.Value)
+    
+    update_Tab2_MainAxes();
 
 end
 

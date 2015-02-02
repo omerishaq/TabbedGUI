@@ -18,14 +18,18 @@ tab1 = uitab(hTabGroup, 'title', 'Annotation');
 position = view.position(2,:);
 
 ui_slider = uicontrol(tab1, 'Style', 'slider','Position', [1100 300 20 300], 'Callback', @slidercallback, 'Min',1,'Max',50,'Value',41);
+view.tab2.slider = ui_slider;
 
 tab1_instructions = ['Welcome to the Forced choice image annotation tab. Specify the image to be loaded by pressing the' ...
     ' load image button at the top, the image to be loaded should have a corresponding text file in the same directory' ...
-    ' with the same name. The corresponding text file should have the horizontal, vertical coordinates and the key feature' ...
-    ' Once the image is loaded the user is shown a pair of spots selected '];
+    ' with the same name. The corresponding text file should contain the horizontal, vertical coordinates and the key feature.' ...
+    ' Once the image is loaded the user is shown a pair of magnified spots selected according to the Forced choice method and the' ...
+    ' user is asked to select either one of the spots as the more likely spot. The annotation progress is shown in the text' ...
+    ' bar below the selection buttons. The magnified spots are also shown in context in the larger low magnification. In addition' ...
+    ' the slider on the right can be used for adjusting the display range of the image windows.'];
 
 
-ui_instructions = uicontrol(tab1, 'Style', 'text', 'String', tab1_instructions, 'Position', [60 220 400 95],'HorizontalAlignment','left');
+ui_instructions = uicontrol(tab1, 'Style', 'text', 'String', tab1_instructions, 'Position', [60 120 400 200],'HorizontalAlignment','left');
 
 ui_text = uicontrol(tab1, 'Style', 'text', 'String', 'Specify file name',...
     'Position', [0+tab1_X_offset position(4)-tab1_Y_offset 150 25],'HorizontalAlignment','left');
@@ -83,6 +87,15 @@ function select_DataFile(hObject, event, handles)
     update_Tab2_MainAxes();
     
     tempfilename = model.strings.imgfilename(1:end-4);
+    
+    % START - ABC - Here comes in the code for tying the slider bar to the image depth
+    img_info = imfinfo([model.strings.imgfilepath model.strings.imgfilename]);
+    view.tab2.slider.max = 2^(img_info.BitDepth)-1;
+    view.tab2.slider.min = 0;
+    view.tab2.slider.value = 2^(img_info.BitDepth)-1;
+    % STOP - ABC
+    
+    % This line of code is important since it loads the f_data structure
     model.struct.f_data = csvread([ model.strings.imgfilepath tempfilename '.csv'], 1, 0);
     
     % here comes the function to setup the initial code for single view
@@ -443,6 +456,7 @@ function slidercallback(source, callbackdata)
 
     % There are three important things here
     % min, max and the value properties
+    
 
 end
 

@@ -24,6 +24,7 @@ view.tab2.text_progress = 0;
 view.tab2.axes_main = 0;
 view.tab2.axes_red_left = 0;
 view.tab2.axes_green_right = 0;
+view.tab2.slider = 0;
 
 %
 % size of the different tabs
