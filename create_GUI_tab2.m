@@ -13,12 +13,22 @@ global view;
 
 tab1_X_offset = 50;
 tab1_Y_offset = 150;
-tab1 = uitab(hTabGroup, 'title','Single Image');
+tab1 = uitab(hTabGroup, 'title', 'Annotation');
 
 position = view.position(2,:);
 
-ui_slider = uicontrol(tab1, 'Style', 'slider','Position', [0 0 100 25], 'Callback', @slidercallback, 'Min',1,'Max',50,'Value',41);
+ui_slider = uicontrol(tab1, 'Style', 'slider','Position', [1100 300 20 300], 'Callback', @slidercallback, 'Min',1,'Max',50,'Value',41);
 
+tab1_instructions = ['Welcome to the Forced choice image annotation tab. Specify the image to be loaded by pressing the' ...
+    ' load image button at the top, the image to be loaded should have a corresponding text file in the same directory' ...
+    ' with the same name. The corresponding text file should contain the horizontal, vertical coordinates and the key feature.' ...
+    ' Once the image is loaded the user is shown a pair of magnified spots selected according to the Forced choice method and the' ...
+    ' user is asked to select either one of the spots as the more likely spot. The annotation progress is shown in the text' ...
+    ' bar below the selection buttons. The magnified spots are also shown in context in the larger low magnification. In addition' ...
+    ' the slider on the right can be used for adjusting the display range of the image windows.'];
+
+
+ui_instructions = uicontrol(tab1, 'Style', 'text', 'String', tab1_instructions, 'Position', [60 120 400 200],'HorizontalAlignment','left');
 
 ui_text = uicontrol(tab1, 'Style', 'text', 'String', 'Specify file name',...
     'Position', [0+tab1_X_offset position(4)-tab1_Y_offset 150 25],'HorizontalAlignment','left');
@@ -27,7 +37,7 @@ ui_edit_text = uicontrol(tab1, 'Style', 'edit',...
 view.tab2.edit_file = ui_edit_text;
 align([ui_text ui_edit_text],'None','Middle');
 
-ui_button_select = uicontrol(tab1, 'Style','pushbutton', 'String','Load',...
+ui_button_select = uicontrol(tab1, 'Style','pushbutton', 'String','Load image',...
     'Position',[185+tab1_X_offset position(4)-(tab1_Y_offset+30), settings.active.button_lengthX, settings.active.button_lengthY], 'Callback', @select_DataFile);
 align([ui_button_select ui_edit_text],'Right','None');
 view.tab2.button_select = ui_button_select;
