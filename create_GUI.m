@@ -14,7 +14,7 @@ create_GUI_tab1( settings, hTabGroup);
 create_GUI_tab2( settings, hTabGroup);
 create_GUI_tab3( settings, hTabGroup);
 
-tab4 = uitab(hTabGroup, 'title','Graphs');
+tab4 = uitab(hTabGroup, 'title','Data Export');
 
 end
 

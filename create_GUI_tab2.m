@@ -84,10 +84,7 @@ function select_DataFile(hObject, event, handles)
 
     model.image.input = imread([model.strings.imgfilepath model.strings.imgfilename]);
     set(view.tab2.edit_file,'String',[model.strings.imgfilename]);
-    update_Tab2_MainAxes();
-    
-    tempfilename = model.strings.imgfilename(1:end-4);
-    
+
     % START - ABC - Here comes in the code for tying the slider bar to the image depth
     img_info = imfinfo([model.strings.imgfilepath model.strings.imgfilename]);
     view.tab2.slider.Max = 2^(img_info.BitDepth)-1;
@@ -95,6 +92,11 @@ function select_DataFile(hObject, event, handles)
     view.tab2.slider.Value = 2^(img_info.BitDepth)-1;
     % STOP - ABC
     
+    update_Tab2_MainAxes();
+    
+    tempfilename = model.strings.imgfilename(1:end-4);
+    
+ 
     % This line of code is important since it loads the f_data structure
     model.struct.f_data = csvread([ model.strings.imgfilepath tempfilename '.csv'], 1, 0);
     
@@ -126,8 +128,8 @@ curAxisProps=axis;
 rectangle('Position',[model.struct.down.c-6, model.struct.down.r-6,13,13],'EdgeColor','g');
 axis(curAxisProps)
 
-imshow(model.image.input(model.struct.up.r-4:model.struct.up.r+4, model.struct.up.c-4:model.struct.up.c+4), 'Parent', view.tab2.axes_red_left); 
-imshow(model.image.input(model.struct.down.r-4:model.struct.down.r+4, model.struct.down.c-4:model.struct.down.c+4), 'Parent', view.tab2.axes_green_right); 
+imshow(model.image.input(model.struct.up.r-4:model.struct.up.r+4, model.struct.up.c-4:model.struct.up.c+4), [view.tab2.slider.Min view.tab2.slider.Value], 'Parent', view.tab2.axes_red_left); 
+imshow(model.image.input(model.struct.down.r-4:model.struct.down.r+4, model.struct.down.c-4:model.struct.down.c+4), [view.tab2.slider.Min view.tab2.slider.Value], 'Parent', view.tab2.axes_green_right); 
 
 end
 
@@ -459,7 +461,7 @@ function slidercallback(source, callbackdata)
     % num2str(source.Value)
     
     update_Tab2_MainAxes();
-
+    update_Tab2_MinorAxes();
 end
 
 

@@ -3,7 +3,7 @@ function [ output_args ] = create_GUI_tab3 ( settings, hTabGroup )
 global view;
 global model;
 
-tab3 = uitab(hTabGroup, 'title','View Spots');                  % create the tab title
+tab3 = uitab(hTabGroup, 'title','Results');                  % create the tab title
 position = view.position(3,:);                                  % read the position at index 3 
 
 % code for adding the three controls and registering them in the view.
