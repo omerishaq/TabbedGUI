@@ -34,7 +34,7 @@ ui_instructions = uicontrol(tab1, 'Style', 'text', 'String', tab1_instructions, 
 ui_text = uicontrol(tab1, 'Style', 'text', 'String', 'Specify file name',...
     'Position', [0+tab1_X_offset position(4)-tab1_Y_offset 150 25],'HorizontalAlignment','left');
 ui_edit_text = uicontrol(tab1, 'Style', 'edit',...
-    'Position', [155+tab1_X_offset position(4)-tab1_Y_offset settings.active.popup_lengthX settings.active.popup_lengthY],'HorizontalAlignment','left');
+    'Position', [100+tab1_X_offset position(4)-tab1_Y_offset settings.active.popup_lengthX+55 settings.active.popup_lengthY],'HorizontalAlignment','left');
 view.tab2.edit_file = ui_edit_text;
 align([ui_text ui_edit_text],'None','Middle');
 

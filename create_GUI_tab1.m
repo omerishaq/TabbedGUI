@@ -39,7 +39,7 @@ Records = Records.Records;
 for i = 1:length(Records)
     CellArray{i} = getfield(Records(i), 'user');
 end
-CellArray = unique(CellArray)';
+CellArray = unique(CellArray, 'stable')';
 CellArray = CellArray(2:end);
 
 cnames = {'User names'};
