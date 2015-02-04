@@ -10,6 +10,7 @@ function TabTest ()
 
 clearvars
 close all
+clear global
 clc
 
 % perform all initializations in this block and create the GUIs

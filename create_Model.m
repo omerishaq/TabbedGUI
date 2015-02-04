@@ -21,7 +21,7 @@ model.image.input = zeros(10,10);
 model.image.next = zeros(10,10);
 model.image.prev = zeros(10,10);
 
-model.flag.debug = 1;
+model.flag.debug = 0;
 model.flag.tab1_finished = 0;
 
 model.struct.data = struct;

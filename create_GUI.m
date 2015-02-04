@@ -5,7 +5,7 @@ function [hTabGroup] = create_GUI(settings)
 global view;
 
 % create the tabbed interface
-f = figure('MenuBar','None','Name','Spot Detector', 'NumberTitle', 'off', 'Resize', 'off', 'Position', view.position(1,:));       % create a figure without the default menu
+f = figure('MenuBar','None','Name','SpotObserver', 'NumberTitle', 'off', 'Resize', 'off', 'Position', view.position(1,:));       % create a figure without the default menu
 hTabGroup = uitabgroup('SelectionChangedFcn',@select_Tab); 
 drawnow;    % create a tab group
 
