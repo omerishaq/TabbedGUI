@@ -143,16 +143,57 @@ function [img_output] = firstproc_Image_Tab2(img_input)
     Data = []; % This part needs to be changed so that the as many additional parameters can be incorporated as possible 
     
     for k = 1:size(model.struct.f_data,1)  %%% ...length(int_linearindices_high)
+        % These three are ofcourse understandable with TWO elements from CSV
         Data(k).img = model.strings.imgfilename;
-        Data(k).peak = model.struct.f_data(k,4); %%% ... sum(img_grade_high(int_R_high(k), int_C_high(k), :));
-        Data(k).sigma = model.struct.f_data(k,3);
-        Data(k).std = model.struct.f_data(k,5);
-        Data(k).uncertainty = model.struct.f_data(k,6);
-        Data(k).intensity = 0; %%% ... sum(sum(img_double(int_R_high(k)-2:int_R_high(k)+2, int_C_high(k)-2:int_C_high(k)+2)/54));
-        Data(k).negintensity = -1*Data(k).intensity;
         Data(k).r = round(model.struct.f_data(k,2)); %%% ... int_R_high(k);
         Data(k).c = round(model.struct.f_data(k,1)); %%% ... int_C_high(k);
+        
+        % ISPEAK is not loaded from any csv file
         Data(k).ispeak = 1;
+        
+        % The THIRD element from CSV, i.e., "THE KEY FEATURE" is loaded into the PEAK attribute
+        try
+            Data(k).peak = model.struct.f_data(k,4); %%% ... sum(img_grade_high(int_R_high(k), int_C_high(k), :));
+        catch E
+            Data(k).peak = 0;
+            Data(k).sigma = 0;
+            Data(k).std = 0;
+            Data(k).uncertainty = 0;
+            Data(k).intensity = 0;
+        end
+        
+        try
+            Data(k).sigma = model.struct.f_data(k,3);
+        catch E
+            Data(k).sigma = 0;
+            Data(k).std = 0;
+            Data(k).uncertainty = 0;
+            Data(k).intensity = 0;
+        end
+            
+        try    
+            Data(k).std = model.struct.f_data(k,5);
+        catch E
+            Data(k).std = 0;
+            Data(k).uncertainty = 0;
+            Data(k).intensity = 0;
+        end
+        
+        try
+            Data(k).uncertainty = model.struct.f_data(k,6);
+        catch E
+            Data(k).uncertainty = 0;
+            Data(k).intensity = 0;
+        end
+        
+        try
+            Data(k).intensity = model.struct.f_data(k,7); %%% ... sum(sum(img_double(int_R_high(k)-2:int_R_high(k)+2, int_C_high(k)-2:int_C_high(k)+2)/54));
+        catch E
+            Data(k).intensity = 0;
+        end
+        
+        Data(k).negintensity = -1*Data(k).intensity;
+
     end
 
 model.struct.data = nestedSortStruct(Data, 'peak');
