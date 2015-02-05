@@ -82,9 +82,15 @@ hold on; axis off; axis equal;
 end
 
 function select_DataFile(hObject, event, handles)
+    
     global model
     global view
-    
+
+    if model.flag.tab1_finished == 0
+        msgbox('Please save user information in the previous tab before proceeeding for annotation.')
+        return;
+    end
+
     [FILENAME, PATHNAME, FILTERINDEX] = uigetfile('*.png');
     model.strings.imgfilename = FILENAME;
     model.strings.imgfilepath = PATHNAME;
@@ -457,7 +463,7 @@ function loadnext()
     
     if model.nums.incrementvalue + model.nums.samplescounter > model.nums.samples
         msgbox(['The next index ' num2str(model.nums.incrementvalue + model.nums.samplescounter) ' exceeds the total number ' ...
-            num2str(model.nums.samples) 'of valid images, please choose ranother image for annotation.']) 
+            num2str(model.nums.samples) ' of valid images, please choose another image for annotation.']) 
         return;
     end
        

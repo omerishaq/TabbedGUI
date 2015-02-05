@@ -82,14 +82,21 @@ hold on; axis off; axis equal;
 end
 
 function select_DataFile(hObject, event, handles)
-    global model
-    global view
     
+    if model.flag.tab1_finished == 1
+        msgbox('Please save user information in the previous tab before proceeeding for annotation.')
+        return;
+    end
+
     [FILENAME, PATHNAME, FILTERINDEX] = uigetfile('*.png');
     model.strings.imgfilename = FILENAME;
     model.strings.imgfilepath = PATHNAME;
 
-    model.image.input = imread([model.strings.imgfilepath model.strings.imgfilename]);
+    try
+        model.image.input = imread([model.strings.imgfilepath model.strings.imgfilename]);
+    catch E % read failure if the user terminate the image loading procedure
+        return;
+    end
     set(view.tab2.edit_file,'String',[model.strings.imgfilename]);
 
     % START - ABC - Here comes in the code for tying the slider bar to the image depth
@@ -453,7 +460,7 @@ function loadnext()
     
     if model.nums.incrementvalue + model.nums.samplescounter > model.nums.samples
         msgbox(['The next index ' num2str(model.nums.incrementvalue + model.nums.samplescounter) ' exceeds the total number ' ...
-            num2str()]) 
+            num2str(model.nums.samples) 'of valid images, please choose ranother image for annotation.']) 
         return;
     end
        
