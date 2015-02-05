@@ -9,10 +9,13 @@ position = view.position(3,:);                                  % read the posit
 tab1_X_offset = 50;
 tab1_Y_offset = 50;
 
+filenames = load_FileNames();
+
 ui_text = uicontrol(tab3, 'Style', 'text', 'String', 'Specify file name',...
     'Position', [100 430 150 25],'HorizontalAlignment','left');
-ui_edit_text = uicontrol(tab3, 'Style', 'edit',...
+ui_edit_text = uicontrol(tab3, 'Style', 'popup', 'String', filenames, ...
     'Position', [240 430 200 25],'HorizontalAlignment','left');
+
 
 
 % % code for adding the three controls and registering them in the view. ui_text = uicontrol(tab3, 'Style', 'text', 'String',
@@ -59,6 +62,16 @@ ui_edit_text = uicontrol(tab3, 'Style', 'edit',...
 % set(view.tab3.popup_threshold,'Value',3); set(view.tab3.popup_mode,'Value',3);
 
 end
+
+function [] = load_FileNames ()
+
+    global model;
+    global view;
+
+end
+
+
+
 
 % Here are the old functions which may or may not be useful
 
