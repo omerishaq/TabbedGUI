@@ -512,6 +512,10 @@ function slidercallback(source, callbackdata)
     update_Tab2_MinorAxes();
 end
 
+function execute_dropdown(source,callbackdata)
+    val = source.Value
+end
+
 
 
 
