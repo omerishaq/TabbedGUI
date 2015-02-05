@@ -89,7 +89,11 @@ function select_DataFile(hObject, event, handles)
     model.strings.imgfilename = FILENAME;
     model.strings.imgfilepath = PATHNAME;
 
-    model.image.input = imread([model.strings.imgfilepath model.strings.imgfilename]);
+    try
+        model.image.input = imread([model.strings.imgfilepath model.strings.imgfilename]);
+    catch E % read failure if the user terminate the image loading procedure
+        return;
+    end
     set(view.tab2.edit_file,'String',[model.strings.imgfilename]);
 
     % START - ABC - Here comes in the code for tying the slider bar to the image depth
@@ -450,6 +454,12 @@ end
 function loadnext()
 
     global model;
+    
+    if model.nums.incrementvalue + model.nums.samplescounter > model.nums.samples
+        msgbox(['The next index ' num2str(model.nums.incrementvalue + model.nums.samplescounter) ' exceeds the total number ' ...
+            num2str(model.nums.samples) 'of valid images, please choose ranother image for annotation.']) 
+        return;
+    end
        
     % ... Now let the user perform the forced choice experiments.
     [struct_H, struct_L] = twoafc_SingleView(model.struct.data);
@@ -492,7 +502,13 @@ end
 function increment_Counter()
     global model;
     global view;
-    model.nums.samplescounter = model.nums.samplescounter + 1;
+    
+    %
+    % code commneted out below so that the now the images can be incremented by the variable step-length
+    %
+    % model.nums.samplescounter = model.nums.samplescounter + 1;
+    model.nums.samplescounter = model.nums.samplescounter + model.nums.incrementvalue;
+    
     set(view.tab2.text_progress, 'string', ['Image ' num2str(model.nums.samplescounter) ' of ' num2str(model.nums.samples)]);
 end
 
@@ -513,7 +529,12 @@ function slidercallback(source, callbackdata)
 end
 
 function execute_dropdown(source,callbackdata)
-    val = source.Value
+    
+    global model; 
+
+    val = source.Value;
+    model.nums.incrementvalue = val;
+    
 end
 
 
