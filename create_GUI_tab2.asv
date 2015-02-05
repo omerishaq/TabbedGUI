@@ -38,12 +38,12 @@ ui_edit_text = uicontrol(tab1, 'Style', 'edit',...
 view.tab2.edit_file = ui_edit_text;
 align([ui_text ui_edit_text],'None','Middle');
 
-% START - ABC - Code to add a drop down here --------------------------------------
+% START - ABC - Code to add a drop down here
 ui_text_2 = uicontrol(tab1, 'Style', 'text', 'String', 'Select image step-length',...
     'Position', [0+tab1_X_offset (position(4)-tab1_Y_offset)-10 150 25],'HorizontalAlignment','left');
-ui_dropdown = uicontrol(tab1, 'Style', 'popup', 'String', {'1','2','3','4','5','6','7','8','9','10'},...
-    'Position', [185+tab1_X_offset (position(4)-tab1_Y_offset)-10 150 25],'HorizontalAlignment','left','Callback', @execute_dropdown);
-% END - ABC -----------------------------------------------------------------------
+ui_dropdown = 
+
+% END - ABC
 
 ui_button_select = uicontrol(tab1, 'Style','pushbutton', 'String','Load image',...
     'Position',[185+tab1_X_offset (position(4)-(tab1_Y_offset+30))+65 settings.active.button_lengthX, settings.active.button_lengthY], 'Callback', @select_DataFile);
