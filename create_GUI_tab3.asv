@@ -18,10 +18,9 @@ ui_tex2 = uicontrol(tab3, 'Style', 'text', 'String', 'Specify user name',...
 ui_dropdown_imgs = uicontrol(tab3, 'Style', 'popup', 'String', filenames, ...
     'Position', [240 430 200 25],'HorizontalAlignment','left', 'Callback', @execute_img_dropdown);
 ui_dropdown_users = uicontrol(tab3, 'Style', 'popup', 'String', filenames, ...
-    'Position', [240 400 200 25],'HorizontalAlignment','left', 'Callback', @execute_users_dropdown);
+    'Position', [240 400 200 25],'HorizontalAlignment','left');
 
-view.tab3.dropdown_imgs = ui_dropdown_imgs;
-view.tab3.dropdown_users = ui_dropdown_users;
+
 
 
 
@@ -55,7 +54,6 @@ function execute_img_dropdown(source, callbackdata)
     selected_Image = source.String(source.Value);
 
     global model;
-    global view;
     
     Records = load(model.strings.resultsfilename);
     Records = Records.Records;
@@ -76,12 +74,6 @@ function execute_img_dropdown(source, callbackdata)
     
     user_Names = {''};
     user_Names = [user_Names CellArray];
-    
-    view.tab3.dropdown_users.String = user_Names;
-
-end
-
-function execute_users_dropdown (source, callbackdata)
 
 end
 
