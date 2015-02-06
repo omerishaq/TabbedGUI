@@ -84,13 +84,29 @@ function execute_users_dropdown (source, callbackdata)
     global model;
     global view;
     
+    data_Master = [];
+    data_Annotated = [];
+    
     if source.Value == 1 % case where all users are selected for an image
         % get img and all users and load all data.
+        for i = 2:length(source.String)
+            selected_User = view.tab3.dropdown_users.String(i);
+            [return_Data_Annotation, return_Data_Master] = retrieve_Data_User (selected_User);
+            data_Master = return_Data_Master;
+            data_Annotated(i-1).anno = return_Data_Annotation;
+        end
+        
     else
         % get img and one selected user and load the data.
         selected_User = view.tab3.dropdown_users.String(view.tab3.dropdown_users.Value);
-        [return_Data] = retrieve_Data_User (selected_User)
+        [return_Data_Annotation, return_Data_Master] = retrieve_Data_User (selected_User);
+        data_Master = return_Data_Master;
+        data_Annotated(1).anno = return_Data_Annotation;
     end
+    
+    % By this stage in this function one has the master record which contains the 'positive' data points for a given
+    % image and the data_Annotated 
+    %
 
 end
 
