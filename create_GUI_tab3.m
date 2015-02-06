@@ -23,8 +23,6 @@ ui_dropdown_users = uicontrol(tab3, 'Style', 'popup', 'String', filenames, ...
 view.tab3.dropdown_imgs = ui_dropdown_imgs;
 view.tab3.dropdown_users = ui_dropdown_users;
 
-
-
 end
 
 function [filenames] = load_FileNames ()
@@ -74,7 +72,7 @@ function execute_img_dropdown(source, callbackdata)
     
     CellArray = unique(CellArray, 'stable');
     
-    user_Names = {''};
+    user_Names = {'Select all users'};
     user_Names = [user_Names CellArray];
     
     view.tab3.dropdown_users.String = user_Names;
@@ -83,6 +81,48 @@ end
 
 function execute_users_dropdown (source, callbackdata)
 
+    global model;
+    global view;
+    
+    if source.Value == 1 % case where all users are selected for an image
+        % get img and all users and load all data.
+    else
+        % get img and one selected user and load the data.
+        selected_User = view.tab3.dropdown_users.String(view.tab3.dropdown_users.Value);
+        [return_Data] = retrieve_Data_User (selected_User)
+    end
+
+end
+
+function [return_Data_Annotation, return_Data_Master] = retrieve_Data_User (selected_User)
+
+    global model;
+    global view;
+    
+    selected_Image = view.tab3.dropdown_imgs.String(view.tab3.dropdown_imgs.Value);
+    
+    % This is the part where the data for annotations for a 
+    % particular user is being recovered from the 'Results' file. 
+    %
+    
+    Records = load(model.strings.resultsfilename);
+    Records = Records.Records;
+    
+    [m] = arrayfun(@(x) strcmp(x.user, selected_User) && strcmp(x.img, selected_Image), Records,'uniformoutput',false);
+    selected_Indices = find(cell2mat(m)); % This returns all those indices which tested positive for the specified user and image
+    return_Data_Annotation = Records(selected_Indices);
+    
+    % This is the part where the master record from the 'Data' folder is being 
+    % recovered for a particular image.
+    %
+    
+    Data = load(model.strings.datafilename);
+    Data = Data.struct_data;
+    
+    [m] = arrayfun(@(x) strcmp(x.img, selected_Image) && x.ispeak == 1, Data,'uniformoutput',false);
+    selected_Indices = find(cell2mat(m));
+    return_Data_Master = Data(selected_Indices);
+    
 end
 
 
