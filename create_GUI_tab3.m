@@ -109,7 +109,7 @@ function execute_users_dropdown (source, callbackdata)
     % for a given user, Ofcourse there may be multiple annotations per same user for the same datapoint.
     
     % Here call a function to overlay the annotation data ontop of the master data.
-    [return_Overlay_Structure] = overlay_Annotations_on_Master();
+    [bins_Pos, bins_Neg] = overlay_Annotations_on_Master(data_Master, data_Annotated);
 
 end
 
@@ -144,7 +144,30 @@ function [return_Data_Annotation, return_Data_Master] = retrieve_Data_User (sele
     
 end
 
-function [return_Overlay_Structure] = overlay_Annotations_on_Master ()
+function [bins_Pos, bins_Neg] = overlay_Annotations_on_Master (data_Master, data_Annotated)
+
+    % create a list equal to the length of the data_Master list.
+    bins_Pos = zeros(length(data_Master),1);
+    bins_Neg = zeros(length(data_Master),1);
+    
+    % first go over all users each elements of data annotated with the data Master
+    for i = 1:length(data_Annotated)
+        Anno = data_Annotated(i).anno;
+        
+        for j = 1:length(Anno)
+            
+            [m] = arrayfun(@(x) x.r == Anno(j).r && x.c == Anno(j).c, data_Master,'uniformoutput',false);
+            index = find(cell2mat(m));
+            if Anno(j).peak == 1
+                bins_Pos(index(1)) = bins_Pos(index(1)) + 1;
+            else
+                bins_Neg(index(1)) = bins_Neg(index(1)) + 1;
+            end
+            
+        end
+        
+    end
+    
 
 end
 
