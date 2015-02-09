@@ -50,6 +50,13 @@ view.tab3.axis_after_spots = 0;
 view.tab3.axis_after_image = 0;
 view.tab3.radio_displays = 0;
 
+% here comes the control which were added after revamping the tab3 interface.
+
+view.tab3.radio = 0;
+view.tab3.fighandle1 = 0;
+view.tab3.bin_Pos = 0;
+view.tab3.bin_Neg = 0;
+
 %
 % place holder for tab 4
 %

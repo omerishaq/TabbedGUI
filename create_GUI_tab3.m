@@ -20,8 +20,40 @@ ui_dropdown_imgs = uicontrol(tab3, 'Style', 'popup', 'String', filenames, ...
 ui_dropdown_users = uicontrol(tab3, 'Style', 'popup', 'String', filenames, ...
     'Position', [240 400 200 25],'HorizontalAlignment','left', 'Callback', @execute_users_dropdown);
 
+ui_text1 = uicontrol(tab3, 'Style', 'text', 'String', 'Specify decision boundary',...
+    'Position', [100 370 200 25],'HorizontalAlignment','left');
+ui_dropdown_fg = uicontrol(tab3, 'Style', 'popup', 'String', {'','40','50','60','70','80','90'}, ...
+    'Position', [290 370 150 25],'HorizontalAlignment','left', 'Callback', @execute_fg_dropdown);
+
+ui_text1 = uicontrol(tab3, 'Style', 'pushbutton', 'String', 'Gen Original Spots',...
+    'Position', [130 340 150 25],'HorizontalAlignment','left', 'Callback', @execute_b1);
+ui_text1 = uicontrol(tab3, 'Style', 'pushbutton', 'String', 'Gen Annotated Spots',...
+    'Position', [290 340 150 25],'HorizontalAlignment','left', 'Callback', @execute_b2);
+
+ui_text1 = uicontrol(tab3, 'Style', 'pushbutton', 'String', 'Gen Original Overlay',...
+    'Position', [130 310 150 25],'HorizontalAlignment','left', 'Callback', @execute_b3);
+ui_text1 = uicontrol(tab3, 'Style', 'pushbutton', 'String', 'Gen Annotated Overlay',...
+    'Position', [290 310 150 25],'HorizontalAlignment','left', 'Callback', @execute_b4);
+
+% ui_button_results = uicontrol(tab3, 'Style', 'pushbutton', 'String', 'Generate results',...
+%     'Position', [240 300 200 25],'HorizontalAlignment','left', 'Callback', @execute_generate_results);
+
 view.tab3.dropdown_imgs = ui_dropdown_imgs;
 view.tab3.dropdown_users = ui_dropdown_users;
+
+% bg = uibuttongroup(tab3,'Visible','off', 'Position',[.3 .58 .24 .1], 'SelectionChangedFcn',@bselection);
+% r1 = uicontrol(bg,'Style',...
+%                   'radiobutton',...
+%                   'String','Order by key feature',...
+%                   'Position',[10 30 140 30],...
+%                   'HandleVisibility','off');
+%               
+% r2 = uicontrol(bg,'Style','radiobutton',...
+%                   'String','Order by annotations',...
+%                   'Position',[10 0 140 30],...
+%                   'HandleVisibility','off');
+% bg.Visible = 'on';
+% view.tab3.radio = bg;
 
 end
 
@@ -110,6 +142,28 @@ function execute_users_dropdown (source, callbackdata)
     
     % Here call a function to overlay the annotation data ontop of the master data.
     [bins_Pos, bins_Neg] = overlay_Annotations_on_Master(data_Master, data_Annotated);
+    view.tab3.bin_Pos = bins_Pos;
+    view.tab3.bin_Neg = bins_Neg;
+    
+    %
+    % Here the data has been generated now just generate the figure.
+    % 
+    
+    % First generate the data
+    bins_Count = bins_Pos + bins_Neg;
+    data_Total = [];
+    for i = 1:length(bins_Count)
+        if bins_Count(i) == 0
+            data_Total = [data_Total 0];
+        else
+            data_Total = [data_Total 100];
+        end
+    end
+    data_Percentage = floor((bins_Pos ./ bins_Count)*100);
+    data_Percentage(isnan(data_Percentage))=0;
+    
+    % Then display the data
+    display_Results(data_Total, data_Percentage', bins_Count');
 
 end
 
@@ -142,6 +196,10 @@ function [return_Data_Annotation, return_Data_Master] = retrieve_Data_User (sele
     selected_Indices = find(cell2mat(m));
     return_Data_Master = Data(selected_Indices);
     
+    [m] = arrayfun(@(x) strcmp(x.img, selected_Image), Data,'uniformoutput',false);
+    selected_Indices = find(cell2mat(m));
+    model.tab3.data_Master_Complete = Data(selected_Indices);
+    
 end
 
 function [bins_Pos, bins_Neg] = overlay_Annotations_on_Master (data_Master, data_Annotated)
@@ -168,6 +226,178 @@ function [bins_Pos, bins_Neg] = overlay_Annotations_on_Master (data_Master, data
         
     end
     
+
+end
+
+function bselection(source, callbackdata)
+       
+
+end
+
+function [] = display_Results (data_Total, data_Percentage, bins_Count)
+
+    %%%
+    %data_Total = [100 100 0 100 100];
+    %data_Percentage = [35 34 0 20 20];
+    x = length(data_Percentage);
+    x = 1:x;
+    y = data_Total;
+    
+    %%%
+
+    global model;
+    global view;
+    
+    model.tab3.datalength = length(x);
+
+    h = figure('Name','Results Plot Window','NumberTitle','off','Position', [100, 100, 1600, 400]);
+    view.tab3.fighandle1 = h;
+    hold on;
+    hBar = bar(x, [data_Percentage; data_Total-data_Percentage]', 'stacked');
+    set(hBar,{'FaceColor'},{'m';'w'}); 
+    
+    for i1=1:numel(y)
+        if bins_Count(i1) > 0    
+                text(x(i1),y(i1),num2str(bins_Count(i1),'%d'),...
+                    'HorizontalAlignment','center',...
+                    'VerticalAlignment','bottom')
+        end
+    end
+    ylim([1 110]);
+    ylabel('Percentage of positive annotations');
+    xlabel('Fluorescent spots');
+    hold off;
+
+end
+
+function execute_fg_dropdown(source, callbackdata)
+
+    global view;
+    global model;
+    
+    bins_Pos = view.tab3.bin_Pos;
+    bins_Neg = view.tab3.bin_Neg;
+    
+    %
+    % Here the data has been generated now just generate the figure.
+    % 
+    
+    if ~isempty(findobj(view.tab3.fighandle1))
+        close(view.tab3.fighandle1);
+        view.tab3.fighandle1 = 0;
+    end
+    
+    % First generate the data
+    bins_Count = bins_Pos + bins_Neg;
+    data_Total = [];
+    for i = 1:length(bins_Count)
+        if bins_Count(i) == 0
+            data_Total = [data_Total 0];
+        else
+            data_Total = [data_Total 100];
+        end
+    end
+    data_Percentage = floor((bins_Pos ./ bins_Count)*100);
+    data_Percentage(isnan(data_Percentage))=0;
+    
+    % Then display the data
+    display_Results(data_Total, data_Percentage', bins_Count');
+    
+    
+    
+    
+    
+    if isempty(findobj(view.tab3.fighandle1))
+        return;
+    end
+
+    base = 20;
+    max_base = 0;
+    
+    if source.Value == 1
+        % do nothing
+    else
+        max_base = base + source.Value * 10;
+    end
+    
+    figure(view.tab3.fighandle1);
+    hold on
+    plot(0:model.tab3.datalength, ones(model.tab3.datalength+1, 1)*max_base, 'b');
+    hold off
+
+end
+
+function execute_b1(source, callbackdata)
+
+    global model;
+    global view;
+    
+    selected_Image = view.tab3.dropdown_imgs.String(view.tab3.dropdown_imgs.Value);
+    Data = model.tab3.data_Master_Complete;
+    
+    Image = imread([model.strings.imgfilepath view.tab3.dropdown_imgs.String{view.tab3.dropdown_imgs.Value}]);
+    
+    [m] = arrayfun(@(x) strcmp(x.img, selected_Image) && x.ispeak == 1, Data,'uniformoutput',false);
+    selected_Indices = find(cell2mat(m));
+    fg_Data = Data(selected_Indices);
+    
+    valuer = [];
+    valuec = [];
+    for k = 1:length(fg_Data)
+        valuer = [valuer; getfield(fg_Data(k),'r')];
+        valuec = [valuec; getfield(fg_Data(k),'c')];
+    end
+    
+    
+    [m] = arrayfun(@(x) strcmp(x.img, selected_Image) && x.ispeak == 0, Data,'uniformoutput',false);
+    selected_Indices = find(cell2mat(m));
+    bg_Data = Data(selected_Indices);
+    
+    naluer = [];
+    naluec = [];
+    for k = 1:length(bg_Data)
+        naluer = [naluer; getfield(bg_Data(k),'r')];
+        naluec = [naluec; getfield(bg_Data(k),'c')];
+    end
+    
+    fgspots = [valuer valuec];
+    bgspots = [naluer naluec];
+    
+    createGridImage (fgspots, bgspots, Image)
+
+end
+
+function execute_b2(source, callbackdata)
+
+end
+
+function execute_b3(source, callbackdata)
+
+    global model;
+    global view;
+    
+    Data = model.tab3.data_Master_Complete;
+    
+    Image = imread([model.strings.imgfilepath view.tab3.dropdown_imgs.String{view.tab3.dropdown_imgs.Value}]);
+    
+    h = figure;
+    hold on
+    imshow(Image)
+    hold on
+    axis image
+    for i = 1:length(Data)
+        if Data(i).ispeak == 1
+            plot(Data(i).c, Data(i).r, 'r+');
+        else
+            plot(Data(i).c, Data(i).r, 'g+');
+        end
+    end
+    hold off
+    
+
+end
+
+function execute_b4(source, callbackdata)
 
 end
 
