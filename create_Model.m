@@ -49,6 +49,7 @@ model.tab3.threshold_values = {nan, 0.5, 0.6, 0.7, 0.8};
 
 model.tab3.datalength = 0;
 model.tab3.data_Master_Complete = 0;
+model.tab3.dropdown_fg = 0;
 
 end
 

@@ -1,10 +1,3 @@
-% INSERT COPYRIGHT INFORMATION HERE
-% INSERT COPYRIGHT INFORMATION HERE
-% INSERT COPYRIGHT INFORMATION HERE
-% INSERT COPYRIGHT INFORMATION HERE
-
-% Insert the script which is to be run at this step to create a database file.
-
 % The entry function for the application.
 function TabTest ()
 

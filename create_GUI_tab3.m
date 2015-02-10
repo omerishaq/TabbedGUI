@@ -40,6 +40,7 @@ ui_text1 = uicontrol(tab3, 'Style', 'pushbutton', 'String', 'Gen Annotated Overl
 
 view.tab3.dropdown_imgs = ui_dropdown_imgs;
 view.tab3.dropdown_users = ui_dropdown_users;
+model.tab3.dropdown_fg = ui_dropdown_fg;
 
 % bg = uibuttongroup(tab3,'Visible','off', 'Position',[.3 .58 .24 .1], 'SelectionChangedFcn',@bselection);
 % r1 = uicontrol(bg,'Style',...
@@ -340,34 +341,92 @@ function execute_b1(source, callbackdata)
     [m] = arrayfun(@(x) strcmp(x.img, selected_Image) && x.ispeak == 1, Data,'uniformoutput',false);
     selected_Indices = find(cell2mat(m));
     fg_Data = Data(selected_Indices);
-    
-    valuer = [];
-    valuec = [];
+  
     for k = 1:length(fg_Data)
-        valuer = [valuer; getfield(fg_Data(k),'r')];
-        valuec = [valuec; getfield(fg_Data(k),'c')];
+        fgspots(k).r = getfield(fg_Data(k),'r');
+        fgspots(k).c = getfield(fg_Data(k),'c');
     end
     
     
     [m] = arrayfun(@(x) strcmp(x.img, selected_Image) && x.ispeak == 0, Data,'uniformoutput',false);
     selected_Indices = find(cell2mat(m));
     bg_Data = Data(selected_Indices);
-    
-    naluer = [];
-    naluec = [];
+
     for k = 1:length(bg_Data)
-        naluer = [naluer; getfield(bg_Data(k),'r')];
-        naluec = [naluec; getfield(bg_Data(k),'c')];
+        bgspots(k).r = getfield(bg_Data(k),'r');
+        bgspots(k).c = getfield(bg_Data(k),'c');
     end
     
-    fgspots = [valuer valuec];
-    bgspots = [naluer naluec];
+    gridimage = createGridImage (fgspots, bgspots, Image);
     
-    createGridImage (fgspots, bgspots, Image)
+    h = figure;
+    hold on
+    imagesc(gridimage)
+    hold on
+    axis image
+    hold off
 
 end
 
 function execute_b2(source, callbackdata)
+
+    global model;
+    global view;
+    
+    selected_Image = view.tab3.dropdown_imgs.String(view.tab3.dropdown_imgs.Value);
+    Data = model.tab3.data_Master_Complete;
+    
+    Image = imread([model.strings.imgfilepath view.tab3.dropdown_imgs.String{view.tab3.dropdown_imgs.Value}]);
+    
+    base = 20;
+    max_base = 0;
+    
+    if model.tab3.dropdown_fg.Value == 1
+        % do nothing
+    else
+        max_base = base + model.tab3.dropdown_fg.Value * 10;
+    end
+    
+    bins_Pos = view.tab3.bin_Pos;
+    bins_Neg = view.tab3.bin_Neg;
+    
+    bins_Count = bins_Pos + bins_Neg;
+    data_Total = [];
+    for i = 1:length(bins_Count)
+        if bins_Count(i) == 0
+            data_Total = [data_Total 0];
+        else
+            data_Total = [data_Total 100];
+        end
+    end
+    data_Percentage = floor((bins_Pos ./ bins_Count)*100);
+    data_Percentage(isnan(data_Percentage))=0;
+    
+    fgspots = [];
+    bgspots = [];
+    
+    for i = 1:length(data_Percentage)
+        if bins_Count(i) > 0 && data_Percentage(i) >= max_base
+            spot.r = getfield(Data(i),'r');
+            spot.c = getfield(Data(i),'c');
+            fgspots = [fgspots spot];
+            
+        elseif bins_Count(i) > 0 && data_Percentage(i) < max_base
+            
+            spot.r = getfield(Data(i),'r');
+            spot.c = getfield(Data(i),'c');
+            bgspots = [bgspots spot];
+        end
+    end
+    
+    gridimage = createGridImage (fgspots, bgspots, Image);
+    
+    h = figure;
+    hold on
+    imagesc(gridimage)
+    hold on
+    axis image
+    hold off
 
 end
 
@@ -398,6 +457,57 @@ function execute_b3(source, callbackdata)
 end
 
 function execute_b4(source, callbackdata)
+
+    global model;
+    global view;
+    
+    Data = model.tab3.data_Master_Complete;
+    
+    Image = imread([model.strings.imgfilepath view.tab3.dropdown_imgs.String{view.tab3.dropdown_imgs.Value}]);
+    
+    % Here is the code to get the value at which the decision is to be taken
+    %
+    
+    base = 20;
+    max_base = 0;
+    
+    if model.tab3.dropdown_fg.Value == 1
+        % do nothing
+    else
+        max_base = base + model.tab3.dropdown_fg.Value * 10;
+    end
+    
+    %
+    % Here comes the plotting code
+    %
+    bins_Pos = view.tab3.bin_Pos;
+    bins_Neg = view.tab3.bin_Neg;
+    
+    bins_Count = bins_Pos + bins_Neg;
+    data_Total = [];
+    for i = 1:length(bins_Count)
+        if bins_Count(i) == 0
+            data_Total = [data_Total 0];
+        else
+            data_Total = [data_Total 100];
+        end
+    end
+    data_Percentage = floor((bins_Pos ./ bins_Count)*100);
+    data_Percentage(isnan(data_Percentage))=0;
+    
+    h = figure;
+    hold on
+    imshow(Image)
+    hold on
+    axis image
+    for i = 1:length(data_Percentage)
+        if bins_Count(i) > 0 && data_Percentage(i) >= max_base
+            plot(Data(i).c, Data(i).r, 'r+');
+        elseif bins_Count(i) > 0 && data_Percentage(i) < max_base
+            plot(Data(i).c, Data(i).r, 'g+');
+        end
+    end
+    hold off
 
 end
 
