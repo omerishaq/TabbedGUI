@@ -13,7 +13,7 @@ drawnow;    % create a tab group
 create_GUI_tab1( settings, hTabGroup);
 create_GUI_tab2( settings, hTabGroup);
 create_GUI_tab3( settings, hTabGroup);
-%create_GUI_tab4( settings, hTabGroup);
+create_GUI_tab4( settings, hTabGroup);
 
 %%tab4 = uitab(hTabGroup, 'title','Data Export');
 
