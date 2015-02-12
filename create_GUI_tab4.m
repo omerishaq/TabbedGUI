@@ -28,15 +28,22 @@ function execute_export(source, callbackdata)
     % First get the image, user and threshold
     [img, users, threshold] = get_img_users_threshold ();
     
+    % Call a function to write the header of the data file
+    %
+    
+    write_header(fid);
+    
     % Now acquire the spot positions and the five features and start writing to the file
     % - The best way to do that would be through a for loop which loops over every spot in the image file
-    %
     %
     % For writing use the following convention
     % - for the first line          dlmwrite('test.txt', [1 2 3], 'newline', 'pc');
     % - for the next lines          dlmwrite('test.txt', [1 2 3], '-append', 'newline', 'pc');
     
-    for k = 1:1 %length(model.tab3.data_Master_Complete)
+    [m] = arrayfun(@(x) x.ispeak == 1 && strcmp(x.img, img), model.tab3.data_Master_Complete,'uniformoutput',false);
+    lenN = length(find(cell2mat(m)));
+    
+    for k = 1:lenN
             
         fprintf(fid,'%s,', img);                                                % write image name
         fprintf(fid,'%d,', model.tab3.data_Master_Complete(k).r);               % write spot.r
@@ -60,9 +67,70 @@ function execute_export(source, callbackdata)
         end
         
         % write the remaining values
+        %
+        
+        Records = load(model.strings.resultsfilename);
+        Records = Records.Records;
+        
+        % num annotations
+        [m] = arrayfun(@(x) model.tab3.data_Master_Complete(k).r == x.r && model.tab3.data_Master_Complete(k).c == x.c && strcmp(x.img, img), ...
+            Records,'uniformoutput',false);
+        num_annotations = length(find(cell2mat(m)));
+        fprintf(fid,'%d,', num_annotations);
+        
+        % num percentage
+        if num_annotations > 0 
+            [m] = arrayfun(@(x) model.tab3.data_Master_Complete(k).r == x.r && model.tab3.data_Master_Complete(k).c == x.c && strcmp(x.img, img) && x.peak == 1, ...
+                Records,'uniformoutput',false);
+            num_positive = length(find(cell2mat(m)));
+            fprintf(fid,'%.2f,', 100*(num_positive/num_annotations));
+        else
+            fprintf(fid,'%.2f,', 0);
+        end
+        
+        % class
+        % There are two cases here...
+        % First, the data has annotations
+        % Second, the data has no annotations
+        if num_annotations > 0 
+            % compute its class by threshold
+            level = 100*(num_positive/num_annotations);
+            if level >= threshold
+                fprintf(fid,'%s,', 'Foreground');
+            else
+                fprintf(fid,'%s,', 'Background');
+            end
+        else
+            % compute its class by closest annotated neighbor
+            query_value = model.tab3.data_Master_Complete(k).peak;
+            [indices_annotated] = generate_overlay (img, lenN);
+            data_annotated = horzcat(model.tab3.data_Master_Complete(indices_annotated).peak);
+                        
+            [c index] = min(abs(data_annotated-query_value));
+            closestValues = data_annotated(index);
+            
+            actual_index = indices_annotated(index);
+            
+            [m] = arrayfun(@(x) model.tab3.data_Master_Complete(actual_index).r == x.r && model.tab3.data_Master_Complete(actual_index).c == x.c && strcmp(x.img, img), ...
+            Records,'uniformoutput',false);
+            num_annotations_temp = length(find(cell2mat(m)));
+
+            % num percentage
+            [m] = arrayfun(@(x) model.tab3.data_Master_Complete(actual_index).r == x.r && model.tab3.data_Master_Complete(actual_index).c == x.c && strcmp(x.img, img) && x.peak == 1, ...
+                Records,'uniformoutput',false);
+            num_positive_temp = length(find(cell2mat(m)));
+
+            level = 100*(num_positive_temp/num_annotations_temp);
+            if level >= threshold
+                fprintf(fid,'%s,', 'Foreground');
+            else
+                fprintf(fid,'%s,', 'Background');
+            end
+           
+        end
         
         % write next line
-    
+        fprintf(fid,'\n');
     end
     
     close(fid);
@@ -90,5 +158,48 @@ function [img, users, threshold] = get_img_users_threshold ()
         threshold = base + model.tab3.dropdown_fg.Value * 10;
     end
 
+end
+
+function write_header (fid)
+
+        fprintf(fid,'%s,', 'Image name');                                                % write image name
+        fprintf(fid,'%s,', 'Position Y');               % write spot.r
+        fprintf(fid,'%s,', 'Position X');               % write spot.c
+        
+        fprintf(fid,'%s,', 'Feature 1');              % write feature1
+        fprintf(fid,'%s,', 'Feature 2');              % write f2
+        fprintf(fid,'%s,', 'Feature 3');              % write f3
+        fprintf(fid,'%s,', 'Feature 4');              % write f4
+        fprintf(fid,'%s,', 'Feature 5');              % write f5
+        
+        k = 1;
+        for r = -4:1:4
+            for c = -4:1:4
+                fprintf(fid,'%s,', ['Pixel value ' num2str(k)]); 
+                k = k + 1;    
+            end
+        end
+        
+        fprintf(fid,'%s,', 'Number of annotations');
+        fprintf(fid,'%s,', 'Percentage classified foreground');
+        fprintf(fid,'%s,', 'Class');
+
+end
+
+function [overlay] = generate_overlay (img, lenN)
+
+    global model;
+    global view;
+    
+    Records = load(model.strings.resultsfilename);
+    Records = Records.Records;
+    
+    for k = 1:lenN
+        [m] = arrayfun(@(x) model.tab3.data_Master_Complete(k).r == x.r && model.tab3.data_Master_Complete(k).c == x.c && strcmp(x.img, img), ...
+        Records,'uniformoutput',false);
+        overlay(k) = length(find(cell2mat(m)));
+    end
+    
+    overlay = find(overlay);
 end
 
