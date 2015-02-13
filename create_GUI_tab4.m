@@ -1,3 +1,5 @@
+% Copyright (C) 2015  Omer Ishaq @ omer.ishaq@gmail.com
+
 function [ output_args ] = create_GUI_tab4 ( settings, hTabGroup )
 
 global view;

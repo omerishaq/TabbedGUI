@@ -1,9 +1,4 @@
-% Things still to be done for the Tab2
-% - Introduce the red and green squares around the smaller images.
-% - Introduce the next and behind images.
-% - Introduce the enable disbale function and radio button for next and
-% behind images
-% - 
+% Copyright (C) 2015  Omer Ishaq @ omer.ishaq@gmail.com
 
 function [ output_args ] = create_GUI_tab2( settings, hTabGroup)
 %UNTITLED Function for creating the single image tab.
@@ -213,7 +208,11 @@ function [img_output] = firstproc_Image_Tab2(img_input)
 
     end
 
-model.struct.data = nestedSortStruct(Data, 'peak');
+% model.struct.data = nestedSortStruct(Data, 'peak');
+data_peak = vertcat(Data(1:end).peak);
+[data_peak I] = sort(data_peak);
+data_ordered = Data(I);
+model.struct.data = data_ordered;
 
 limit = round(length(model.struct.data) * model.nums.background_ratio);
 

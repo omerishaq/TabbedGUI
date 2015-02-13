@@ -1,3 +1,5 @@
+% Copyright (C) 2015  Omer Ishaq @ omer.ishaq@gmail.com
+
 function [ ] = initialize_GUI( hTabGroup )
 
 %%%   this code block was being used to disable the tabs in the tabbed view

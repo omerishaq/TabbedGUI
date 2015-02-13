@@ -1,3 +1,5 @@
+% Copyright (C) 2015  Omer Ishaq @ omer.ishaq@gmail.com
+
 function [] = create_Model()
 
 global model;

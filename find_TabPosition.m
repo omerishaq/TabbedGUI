@@ -1,3 +1,5 @@
+% Copyright (C) 2015  Omer Ishaq @ omer.ishaq@gmail.com
+
 function [ column ] = find_TabPosition( hObject )
 %UNTITLED2 Summary of this function goes here
 %   hObject - The tab parent object

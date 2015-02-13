@@ -1,4 +1,4 @@
-% Script to generate the inital Results.mat file
+% Copyright (C) 2015  Omer Ishaq @ omer.ishaq@gmail.com
 
 clear all
 close all

@@ -1,3 +1,5 @@
+% Copyright (C) 2015  Omer Ishaq @ omer.ishaq@gmail.com
+
 function [settings] = initialize_Settings()
 
     % the settings are divided into two groups; active and passive. 

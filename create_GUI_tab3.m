@@ -1,3 +1,5 @@
+% Copyright (C) 2015  Omer Ishaq @ omer.ishaq@gmail.com
+
 function [ output_args ] = create_GUI_tab3 ( settings, hTabGroup )
 
 global view;
@@ -617,7 +619,13 @@ function load_BeforeAnnotationData ()
         Data(k).c = round(model.tab3.struct.f_data(k,1)); 
     end
     
-    Data = nestedSortStruct(Data, 'peak');
+    % Data = nestedSortStruct(Data, 'peak');
+    data_peak = vertcat(Data(1:end).peak);
+    [data_peak I] = sort(data_peak);
+    data_ordered = Data(I);
+    Data = data_ordered;
+    
+    
     limit = round(length(Data) * model.nums.background_ratio);
     Data = fliplr(Data);
     

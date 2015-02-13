@@ -1,3 +1,5 @@
+% Copyright (C) 2015  Omer Ishaq @ omer.ishaq@gmail.com
+
 function [ output_args ] = create_GUI_tab1( settings, hTabGroup)
 %UNTITLED5 Summary of this function goes here
 %   Detailed explanation goes here
@@ -81,7 +83,7 @@ function load_User(hObject, event, handles)
     
     selected_Index = event.Indices(1);
     
-    view.tab1.edit_user.String = CellArray(selected_Index);
+    view.tab1.edit_user.String = CellArray{selected_Index};
 
 end
 

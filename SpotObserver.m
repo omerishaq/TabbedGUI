@@ -1,4 +1,8 @@
 % The entry function for the application.
+% Copyright (C) 2015  Omer Ishaq @ omer.ishaq@gmail.com
+
+
+
 function SpotObserver ()
 
 clearvars
