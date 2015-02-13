@@ -10,15 +10,26 @@ global t;
 global CellArray;
 
 tab1_X_offset = 150;
-tab1_Y_offset = -100;
+tab1_Y_offset = -130;
 tab1 = uitab(hTabGroup, 'title','Users');            % add first tab
 
-tab1_instructions = ['Welcome to the Users tab. Before proceeding to the next tab please ensure that you have saved a user name and' ...
- ' specified a background ratio. The user name can either be selected from the table towards right or a new user name entered in the' ...'
- ' field below. The background ratio specifies the fraction of spots which are treated as background spots. The specified user name' ...
- ' and background ratio cannot be changed for the duration of the annotation session'];
+tab1_instructions{1} = 'HELP:';
+tab1_instructions{2} = '---------';
+tab1_instructions{3} = 'OPERATION:';
+tab1_instructions{4} = '1. Before proceeding to the next tab please ensure that you have saved a user name and specified a background ratio.';
+tab1_instructions{5} = '2. The user name can either be selected from the table towards right or a new user name entered in the field below.';
+tab1_instructions{6} = '3. The background ratio specifies the fraction of spots which are treated as background spots.';
+tab1_instructions{7} = '4. The specified user name and background ratio cannot be changed for the duration of the annotation session.';
 
-ui_instructions = uicontrol(tab1, 'Style', 'text', 'String', tab1_instructions, 'Position', [20 360 500 95],'HorizontalAlignment','left');
+ui_instructions = uicontrol(tab1, 'Style', 'text', 'String', tab1_instructions, 'Position', [30 320 730 135],'HorizontalAlignment','left');
+
+
+% tab1_instructions = ['Welcome to the Users tab. Before proceeding to the next tab please ensure that you have saved a user name and' ...
+%  ' specified a background ratio. The user name can either be selected from the table towards right or a new user name entered in the' ...'
+%  ' field below. The background ratio specifies the fraction of spots which are treated as background spots. The specified user name' ...
+%  ' and background ratio cannot be changed for the duration of the annotation session'];
+% 
+% ui_instructions = uicontrol(tab1, 'Style', 'text', 'String', tab1_instructions, 'Position', [20 360 500 95],'HorizontalAlignment','left');
 
 ui_text = uicontrol(tab1, 'Style', 'text', 'String', 'Specify user name', 'Position', [0+tab1_X_offset 400+tab1_Y_offset 150 25],'HorizontalAlignment','left');
 ui_edit_user = uicontrol(tab1, 'Style', 'edit', 'Position', [155+tab1_X_offset 400+tab1_Y_offset settings.active.popup_lengthX settings.active.popup_lengthY],'HorizontalAlignment','left');
@@ -45,7 +56,7 @@ CellArray = unique(CellArray, 'stable')';
 CellArray = CellArray(2:end);
 
 cnames = {'User names'};
-t = uitable('Parent', tab1, 'Data', CellArray, 'ColumnWidth', {265}, 'Position', [550 50 300 400], 'ColumnName',cnames, 'CellSelectionCallback', @load_User);
+t = uitable('Parent', tab1, 'Data', CellArray, 'ColumnWidth', {265}, 'Position', [520 50 300 247], 'ColumnName',cnames, 'CellSelectionCallback', @load_User);
 
 
 

@@ -5,11 +5,23 @@ function [ output_args ] = create_GUI_tab4 ( settings, hTabGroup )
 global view;
 global model;
 
-tab4 = uitab(hTabGroup, 'title','Data Export');                     % create the tab title
+tab4 = uitab(hTabGroup, 'title','Machine Learning Data Export');                     % create the tab title
 position = view.position(4,:);  
 
 ui_text1 = uicontrol(tab4, 'Style', 'pushbutton', 'String', 'Export Data',...
-    'Position', [120 200 150 25],'HorizontalAlignment','left', 'Callback', @execute_export);
+    'Position', [120 250 150 25],'HorizontalAlignment','left', 'Callback', @execute_export);
+
+tab1_instructions{1} = 'HELP:';
+tab1_instructions{2} = '---------';
+tab1_instructions{3} = '';
+tab1_instructions{4} = 'REQUIREMENTS:';
+tab1_instructions{5} = ['1. Please make sure that the first three controls (image, user, threshold) of the RESULTS tab have been selected, ' ...
+    'since the data to be exported corresponds to the image, user and threshold selected at the RESULTS tab.'];
+tab1_instructions{6} = '';
+tab1_instructions{7} = 'OPERATION:';
+tab1_instructions{8} = '1. Press the export button, located above, to generate a comma separated file with the export data.';
+
+ui_instructions = uicontrol(tab4, 'Style', 'text', 'String', tab1_instructions, 'Position', [10 10 385 200],'HorizontalAlignment','left');
 
 end
 

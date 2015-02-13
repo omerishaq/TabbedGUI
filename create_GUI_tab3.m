@@ -58,6 +58,23 @@ model.tab3.dropdown_fg = ui_dropdown_fg;
 % bg.Visible = 'on';
 % view.tab3.radio = bg;
 
+tab1_instructions{1} = 'HELP:';
+tab1_instructions{2} = '---------';
+tab1_instructions{3} = '';
+tab1_instructions{4} = 'REQUIREMENTS:';
+tab1_instructions{5} = ['1. Please make sure that before generating the spots or the overlays (using the bottom four buttons on this tab), ' ...
+    'you have selected an image in the ANNOTATION tab (you do not need to actually do an annotation but just select the image) ' ...
+    'because the paths for the images folder are extracted from the ANNOTATION tab.'];
+tab1_instructions{6} = '';
+tab1_instructions{7} = 'OPERATION:';
+tab1_instructions{8} = '1. Specify the image for which you want the results in the first drop down control on this tab.';
+tab1_instructions{9} = ['2. Specify the users whose annotations you want to view through the second drop down control on this tab. This will generate a plot ' ...
+    'showing the total number of annotaions of each spot as well as the percentage of its positive annotations.'];
+tab1_instructions{10} = '3. Specify the positive annotation threshold for selecting the foreground.';
+tab1_instructions{11} = '4. Use any of the four buttons at the bottom to view the spots and their ovelay on the original image.';
+
+ui_instructions = uicontrol(tab3, 'Style', 'text', 'String', tab1_instructions, 'Position', [20 10 550 280],'HorizontalAlignment','left');
+
 end
 
 function [filenames] = load_FileNames ()
