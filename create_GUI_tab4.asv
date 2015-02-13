@@ -135,12 +135,7 @@ function execute_export(source, callbackdata)
         [m] = arrayfun(@(x) model.tab3.data_Master_Complete(k).r == x.r && model.tab3.data_Master_Complete(k).c == x.c && strcmp(x.img, img), ...
         Records,'uniformoutput',false);
         indices = find(cell2mat(m));
-        Annotation_Records = Records(indices);
-        write_str = [];
-        for kk = 1:length(Annotation_Records)
-            write_str = [write_str Annotation_Records(kk).user ':' num2str(Annotation_Records(kk).peak) ';'];
-        end
-        fprintf(fid,'%s,', write_str);
+        Annotation_Records = 
         
         % write next line
         fprintf(fid,'\n');
@@ -197,8 +192,6 @@ function write_header (fid)
         fprintf(fid,'%s,', 'Number of annotations');
         fprintf(fid,'%s,', 'Percentage classified foreground');
         fprintf(fid,'%s,', 'Class');
-        
-        fprintf(fid,'%s,', 'User annotation details');
         
         fprintf(fid,'\n');
 
