@@ -244,10 +244,7 @@ update_Counter();
 
 % Reflip the data so that the data is ordered in ascending order of the
 % 'peak' field of the 'Data' structure.
-
-% THIS LINE BELOW HAS BEEN COMMENTED OUT SO THAT THE CHI2 IS IN DECREASING ORDER RATHER
-% THAN INCREASING ORDER.
-% model.struct.data = fliplr(model.struct.data);
+model.struct.data = fliplr(model.struct.data);
 
 img_output = model.struct.data;
 
