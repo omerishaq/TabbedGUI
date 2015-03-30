@@ -173,8 +173,8 @@ function [img_output] = firstproc_Image_Tab2(img_input)
     for k = 1:size(model.struct.f_data,1)  %%% ...length(int_linearindices_high)
         % These three are ofcourse understandable with TWO elements from CSV
         Data(k).img = model.strings.imgfilename;
-        Data(k).r = round(model.struct.f_data(k,2)); %%% ... int_R_high(k);
-        Data(k).c = round(model.struct.f_data(k,1)); %%% ... int_C_high(k);
+        Data(k).r = round(model.struct.f_data(k,2) + 0.5); %%% ... int_R_high(k);
+        Data(k).c = round(model.struct.f_data(k,1) + 0.5); %%% ... int_C_high(k);
         
         % ISPEAK is not loaded from any csv file
         Data(k).ispeak = 1;
@@ -242,12 +242,10 @@ end
 model.nums.samples = length(model.struct.data)-limit;
 update_Counter();
 
-% Reflip the data so that the data is ordered in ascending order of the
+% Reflip the data so that the data is ordered in decreasing order of the
 % 'peak' field of the 'Data' structure.
 
-% THIS LINE BELOW HAS BEEN COMMENTED OUT SO THAT THE CHI2 IS IN DECREASING ORDER RATHER
-% THAN INCREASING ORDER.
-% model.struct.data = fliplr(model.struct.data);
+model.struct.data = fliplr(model.struct.data);
 
 img_output = model.struct.data;
 
