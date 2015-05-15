@@ -185,7 +185,7 @@ function [img_output] = firstproc_Image_Tab2(img_input)
         
         % The THIRD element from CSV, i.e., "THE KEY FEATURE" is loaded into the PEAK attribute
         try
-            Data(k).peak = model.struct.f_data(k,6); %%% ... sum(img_grade_high(int_R_high(k), int_C_high(k), :));
+            Data(k).peak = model.struct.f_data(k,3); %%% ... sum(img_grade_high(int_R_high(k), int_C_high(k), :));
         catch E
             Data(k).peak = 0;
             Data(k).sigma = 0;
@@ -195,7 +195,7 @@ function [img_output] = firstproc_Image_Tab2(img_input)
         end
         
         try
-            Data(k).sigma = model.struct.f_data(k,3);
+            Data(k).sigma = model.struct.f_data(k,6);
         catch E
             Data(k).sigma = 0;
             Data(k).std = 0;
@@ -233,6 +233,7 @@ data_peak = vertcat(Data(1:end).peak);
 [data_peak I] = sort(data_peak);
 data_ordered = Data(I);
 model.struct.data = data_ordered;
+model.struct.data = fliplr(model.struct.data);
 
 limit = round(length(model.struct.data) * model.nums.background_ratio);
 
@@ -249,9 +250,7 @@ update_Counter();
 % Reflip the data so that the data is ordered in decreasing order of the
 % 'peak' field of the 'Data' structure.
 
-model.struct.data = fliplr(model.struct.data);
-
-img_output = model.struct.data;
+img_output = fliplr(model.struct.data);
 
 end
 
