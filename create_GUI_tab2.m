@@ -12,7 +12,7 @@ tab1 = uitab(hTabGroup, 'title', 'Annotation');
 
 position = view.position(2,:);
 
-ui_slider = uicontrol(tab1, 'Style', 'slider','Position', [1100 300 20 300], 'Callback', @slidercallback, 'Min',1,'Max',50,'Value',41);
+ui_slider = uicontrol(tab1, 'Style', 'slider','Position', [1300 300 20 300], 'Callback', @slidercallback, 'Min',1,'Max',50,'Value',41);
 view.tab2.slider = ui_slider;
 
 tab1_instructions{1} = 'HELP:';
@@ -62,19 +62,19 @@ align([ui_button_select ui_edit_text],'Right','None');
 view.tab2.button_select = ui_button_select;
 
 ui_button_red = uicontrol(tab1, 'Style','pushbutton', 'String','Red', 'BackgroundColor', [1 0 0],...
-    'Position',[15+tab1_X_offset position(4)-(tab1_Y_offset+230), settings.active.button_lengthX, settings.active.button_lengthY], 'Callback', @execute_Red);
+    'Position',[50+tab1_X_offset position(4)-(tab1_Y_offset+330), settings.active.button_lengthX, settings.active.button_lengthY], 'Callback', @execute_Red);
 view.tab2.button_red = ui_button_red;
 
 ui_button_green = uicontrol(tab1, 'Style','pushbutton', 'String','Green', 'BackgroundColor', [0 1 0],...
-    'Position',[205+tab1_X_offset position(4)-(tab1_Y_offset+230), settings.active.button_lengthX, settings.active.button_lengthY], 'Callback', @execute_Green);
+    'Position',[240+tab1_X_offset position(4)-(tab1_Y_offset+330), settings.active.button_lengthX, settings.active.button_lengthY], 'Callback', @execute_Green);
 view.tab2.button_green = ui_button_green;
 
 ui_progress = uicontrol(tab1, 'Style', 'text', 'String', 'Image 0 of 0',...
-    'Position', [80+tab1_X_offset position(4)-(tab1_Y_offset+280), 200, 30],'HorizontalAlignment','Center');
+    'Position', [115+tab1_X_offset position(4)-(tab1_Y_offset+380), 200, 30],'HorizontalAlignment','Center');
 view.tab2.text_progress = ui_progress;
 
 % create the main axis here
-ah = axes('Parent', tab1, 'Position',  [.25 .05 settings.active.magnification+0.3 settings.active.magnification+0.3], 'Box', 'off');
+ah = axes('Parent', tab1, 'Position',  [.25 .01 settings.active.magnification+0.33 settings.active.magnification+0.33], 'Box', 'off');
 view.tab2.axes_main = ah; 
 hold on; axis off; axis equal;
 
@@ -108,6 +108,9 @@ function select_DataFile(hObject, event, handles)
 
     try
         model.image.input = imread([model.strings.imgfilepath model.strings.imgfilename]);
+        [indices] = find(model.image.input > 16000);
+        model.image.input(indices) = 0;
+        
     catch E % read failure if the user terminate the image loading procedure
         return;
     end
@@ -116,8 +119,9 @@ function select_DataFile(hObject, event, handles)
     % START - ABC - Here comes in the code for tying the slider bar to the image depth
     img_info = imfinfo([model.strings.imgfilepath model.strings.imgfilename]);
     view.tab2.slider.Max = 2^(img_info.BitDepth)-1;
+    view.tab2.slider.Max = 16000;
     view.tab2.slider.Min = 0;
-    view.tab2.slider.Value = 2^(img_info.BitDepth)-1;
+    view.tab2.slider.Value = 16000;
     % STOP - ABC
     
     update_Tab2_MainAxes();
