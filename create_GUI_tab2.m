@@ -96,6 +96,7 @@ function select_DataFile(hObject, event, handles)
     
     global model
     global view
+  
 
     if model.flag.tab1_finished == 0
         msgbox('Please save user information in the previous tab before proceeeding for annotation.')
@@ -119,9 +120,9 @@ function select_DataFile(hObject, event, handles)
     % START - ABC - Here comes in the code for tying the slider bar to the image depth
     img_info = imfinfo([model.strings.imgfilepath model.strings.imgfilename]);
     view.tab2.slider.Max = 2^(img_info.BitDepth)-1;
-    view.tab2.slider.Max = 16000;
+    view.tab2.slider.Max = 10000;
     view.tab2.slider.Min = 0;
-    view.tab2.slider.Value = 16000;
+    view.tab2.slider.Value = 10000;
     % STOP - ABC
     
     update_Tab2_MainAxes();
@@ -416,6 +417,9 @@ function execute_Red(hObject, event, handles)
 
 global model;
 
+% global private_handles;
+% private_handles = handles;
+
 struct_record.img = model.strings.imgfilename;   
 struct_record.user = model.strings.username;
 
@@ -448,6 +452,9 @@ end
 function execute_Green(hObject, event, handles)
 
 global model;
+
+% global private_handles;
+% private_handles = handles;
 
 struct_record.img = model.strings.imgfilename;   
 struct_record.user = model.strings.username;
@@ -490,7 +497,7 @@ function loadnext()
     [struct_H, struct_L] = twoafc_SingleView(model.struct.data);
     
     if model.nums.samplescounter >= model.nums.samples
-        disableAllControls(handles);
+        disableAllControls();
         return
     end
     
@@ -510,7 +517,7 @@ function loadnext()
 
 end
 
-function disableAllControls(handles)
+function disableAllControls()
 
 global view;
 

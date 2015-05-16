@@ -31,7 +31,7 @@ model.struct.up = struct;
 model.struct.down = struct;
 model.struct.f_data = struct;
 
-model.nums.background_ratio = .15;
+model.nums.background_ratio = .20;
 model.nums.samples = 200;               % total number of FG spots/signals in a .csv file
 model.nums.samplescounter = 0;          % current spot/signal number being processed, I am positive it needs to be set to 0
 model.nums.incrementvalue = 1;
