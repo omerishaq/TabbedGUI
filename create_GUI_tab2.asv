@@ -135,8 +135,6 @@ function select_DataFile(hObject, event, handles)
     
     % here comes the function to setup the initial code for single view
     setup_SingleView_Logic();
-    set(view.tab2.button_green,'Enable','on');
-    set(view.tab2.button_red,'Enable','on');
     
 end
 
@@ -506,7 +504,6 @@ function loadnext()
     if model.nums.incrementvalue + model.nums.samplescounter > model.nums.samples
         msgbox(['The next index ' num2str(model.nums.incrementvalue + model.nums.samplescounter) ' exceeds the total number ' ...
             num2str(model.nums.samples) ' of valid images, please choose another image for annotation.']) 
-        disableAllControls();
         return;
     end
        
@@ -536,9 +533,7 @@ end
 
 function disableAllControls()
 
-    global model;
-    global view;
-    global t;
+global view;
 
 
 display('Debug: In disable controls function');
@@ -549,15 +544,6 @@ msgbox('Session finsihed for this image, please select another image','modal');
 
 % Insert code here to flush or clear the model.
 create_Model(); % Resets the model to its original value
-
-        model.strings.username = view.tab1.edit_user.String;
-        model.nums.background_ratio = str2num(view.tab1.popup_mode.String);
-        assert(~isempty(model.strings.username));
-        view.tab1.edit_user.Enable = 'off';
-        view.tab1.button_save.Enable = 'off';
-        view.tab1.popup_mode.Enable = 'off';
-        t.Enable = 'off';
-        model.flag.tab1_finished = 1;
 
 end
 
