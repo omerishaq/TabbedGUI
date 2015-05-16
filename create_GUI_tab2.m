@@ -253,7 +253,8 @@ update_Counter();
 % Reflip the data so that the data is ordered in decreasing order of the
 % 'peak' field of the 'Data' structure.
 
-img_output = fliplr(model.struct.data);
+model.struct.data = fliplr(model.struct.data);
+img_output = model.struct.data;
 
 end
 
