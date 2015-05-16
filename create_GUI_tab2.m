@@ -143,7 +143,7 @@ function update_Tab2_MainAxes()
     global model;
     global view;
     imshow(model.image.input, [view.tab2.slider.Min view.tab2.slider.Value], 'Parent', view.tab2.axes_main);
-    
+    drawnow
 end
 
 function update_Tab2_MinorAxes()
@@ -155,15 +155,17 @@ axes(view.tab2.axes_main)
 curAxisProps=axis;
 rectangle('Position',[model.struct.up.c-6, model.struct.up.r-6,13,13],'EdgeColor','r');
 axis(curAxisProps)
+drawnow
 
 axes(view.tab2.axes_main) 
 curAxisProps=axis;
 rectangle('Position',[model.struct.down.c-6, model.struct.down.r-6,13,13],'EdgeColor','g');
 axis(curAxisProps)
+drawnow
 
 imshow(model.image.input(model.struct.up.r-4:model.struct.up.r+4, model.struct.up.c-4:model.struct.up.c+4), [view.tab2.slider.Min view.tab2.slider.Value], 'Parent', view.tab2.axes_red_left); 
 imshow(model.image.input(model.struct.down.r-4:model.struct.down.r+4, model.struct.down.c-4:model.struct.down.c+4), [view.tab2.slider.Min view.tab2.slider.Value], 'Parent', view.tab2.axes_green_right); 
-
+drawnow
 end
 
 function [img_output] = firstproc_Image_Tab2(img_input) 
@@ -520,7 +522,7 @@ end
 function disableAllControls()
 
 global view;
-
+display('Debug: In disable controls function');
 set(view.tab2.edit_file,'String','');
 set(view.tab2.button_green,'Enable','off');
 set(view.tab2.button_red,'Enable','off');
