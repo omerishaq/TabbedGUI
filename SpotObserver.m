@@ -36,6 +36,7 @@ str_filename = 'Results.mat';
         Records.c       = 0;
         Records.user    = 'test user';
         Records.img     = 'test user';
+        Records.time    = 0;
         save Results.mat Records
     end
 

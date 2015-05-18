@@ -96,6 +96,9 @@ function select_DataFile(hObject, event, handles)
     
     global model
     global view
+    global timing_information;
+    
+    timing_information = 0;
   
 
     if model.flag.tab1_finished == 0
@@ -432,6 +435,14 @@ end
 function execute_Red(hObject, event, handles) 
 
 global model;
+global timing_information;
+
+if timing_information == 0
+    timing_information = tic;
+    tim = 0;
+else
+    tim = toc(timing_information);
+end
 
 % global private_handles;
 % private_handles = handles;
@@ -459,15 +470,26 @@ Records(ilength + 1).r = struct_record.r;
 Records(ilength + 1).c = struct_record.c;
 Records(ilength + 1).user = struct_record.user;
 Records(ilength + 1).img = struct_record.img;
+Records(ilength + 1).time = tim;
 save(model.strings.resultsfilename, 'Records');
 
 loadnext();
+
+timing_information = tic;
 
 end
 
 function execute_Green(hObject, event, handles)
 
 global model;
+global timing_information;
+
+if timing_information == 0
+    timing_information = tic;
+    tim = 0;
+else
+    tim = toc(timing_information);
+end
 
 % global private_handles;
 % private_handles = handles;
@@ -493,9 +515,12 @@ Records(ilength + 1).r = struct_record.r;
 Records(ilength + 1).c = struct_record.c;
 Records(ilength + 1).user = struct_record.user;
 Records(ilength + 1).img = struct_record.img;
+Records(ilength + 1).time = tim;
 save(model.strings.resultsfilename, 'Records');
 
-loadnext();    
+loadnext();   
+
+timing_information = tic;
 
 end
 
